@@ -1,8 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- K vertical spine -->
-  <rect x="3" y="2" width="6" height="28" rx="3" fill="#2D6A4F"/>
-  <!-- K lower arm -->
-  <path d="M8 17 L26 30 L21 30 L8 20 Z" fill="#2D6A4F"/>
-  <!-- K upper arm as feather (curved leaf shape) -->
-  <path d="M8 15 C10 11 15 6 23 2 C19 5 13 10 8 17 Z" fill="#52B788"/>
+  <!-- K vertical bar / quill shaft -->
+  <path d="M4 2 Q6 1 8 2 L8 27 Q7 29 5 29 Q3 28 4 26 Z" fill="#2D6A4F"/>
+  <!-- Quill nib (pointed tip) -->
+  <path d="M4 27 L6 31 L9 27 Z" fill="#1F4D3A"/>
+  <!-- Feather upper vane / K upper arm — quill pen shape, light green -->
+  <path d="M8 13 C12 9 17 6 24 3 C28 1 31 1 31 1 C27 4 22 8 18 12 C14 15 11 17 8 18 Z" fill="#52B788"/>
+  <!-- Inner feather detail (rachis shadow) -->
+  <path d="M8 15 C11 12 16 9 22 6 L21 7 C15 10 11 13 8 17 Z" fill="#2D6A4F" opacity="0.25"/>
+  <!-- K lower arm / quill lower vane -->
+  <path d="M8 18 L27 30 L22 30 L8 21 Z" fill="#2D6A4F"/>
 </svg>
