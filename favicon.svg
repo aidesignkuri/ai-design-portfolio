@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- K vertical spine -->
+  <rect x="3" y="2" width="6" height="28" rx="3" fill="#2D6A4F"/>
+  <!-- K lower arm -->
+  <path d="M8 17 L26 30 L21 30 L8 20 Z" fill="#2D6A4F"/>
+  <!-- K upper arm as feather (curved leaf shape) -->
+  <path d="M8 15 C10 11 15 6 23 2 C19 5 13 10 8 17 Z" fill="#52B788"/>
+</svg>
