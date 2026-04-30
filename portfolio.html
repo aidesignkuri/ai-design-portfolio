@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ポートフォリオ — AI × Webデザイン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Klee+One:wght@400;600&family=Fraunces:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --bg: #F9F6F1;
+    --bg-soft: #F2EDE4;
+    --green: #2D6A4F;
+    --green-deep: #1F4D3A;
+    --green-light: #52B788;
+    --green-mist: #E6F0EA;
+    --ink: #1A1A1A;
+    --ink-mute: #5C5C5C;
+    --line: rgba(26,26,26,0.10);
+    --radius-btn: 999px;
+    --radius-card: 24px;
+    --radius-sm: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans JP", system-ui, sans-serif;
+    font-feature-settings: "palt";
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.7;
+  }
+  body[data-typo="maru"] { font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif; }
+  body[data-typo="kaku"] { font-family: "Zen Kaku Gothic New", "Noto Sans JP", sans-serif; }
+  body[data-typo="klee"] { font-family: "Klee One", "Noto Sans JP", serif; }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .9s ease, transform .9s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+// ─── tweaks-panel.jsx ────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;overflow-wrap:anywhere}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    const ro = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(clampToViewport)
+      : null;
+    if (ro) ro.observe(document.documentElement);
+    else window.addEventListener('resize', clampToViewport);
+    return () => { if (ro) ro.disconnect(); else window.removeEventListener('resize', clampToViewport); };
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
+      clampToViewport();
+    };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks" onMouseDown={(e) => e.stopPropagation()} onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return (<><div className="twk-sect">{label}</div>{children}</>);
+}
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl"><span>{label}</span>{value != null && <span className="twk-val">{value}</span>}</div>
+      {children}
+    </div>
+  );
+}
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'} role="switch" aria-checked={!!value} onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const i = Math.floor(((clientX - r.left - 2) / (r.width - 4)) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => { if (!trackRef.current) return; const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown} className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb" style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (<button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>))}
+      </div>
+    </TweakRow>
+  );
+}
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => { const v = typeof o === 'object' ? o.value : o; const l = typeof o === 'object' ? o.label : o; return <option key={v} value={v}>{l}</option>; })}
+      </select>
+    </TweakRow>
+  );
+}
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value} onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakColor,
+});
+</script>
+
+<script type="text/babel">
+// ─── components.jsx ──────────────────────────────────────────────────────────
+
+const { useState, useEffect, useRef, useMemo } = React;
+
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+function smoothScrollTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 24, behavior: "smooth" });
+}
+
+function LeafMark({ size = 28, color = "var(--green)" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M5 27c0-12 8-20 22-22-1 14-9 22-22 22Z" fill={color} />
+      <path d="M5 27C9 22 14 18 22 14" stroke="var(--bg)" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+function Logo({ name = "AIデザイン工房" }) {
+  return (
+    <a href="#top" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "var(--ink)" }} onClick={(e) => { e.preventDefault(); smoothScrollTo("top"); }}>
+      <LeafMark size={26} />
+      <span style={{ fontSize: 18, fontWeight: 600, letterSpacing: "0.02em" }}>{name}</span>
+    </a>
+  );
+}
+
+function PrimaryBtn({ children, onClick, href, radius = 999, ...rest }) {
+  const style = {
+    display: "inline-flex", alignItems: "center", gap: 10,
+    padding: "16px 28px", background: "var(--green)", color: "#fff",
+    borderRadius: radius, border: "none", fontSize: 16, fontWeight: 600,
+    boxShadow: "0 8px 24px -8px rgba(45,106,79,0.45)",
+    transition: "transform .2s ease, background .2s ease",
+  };
+  const Tag = href ? "a" : "button";
+  return (
+    <Tag href={href} onClick={onClick} style={style}
+      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.background = "var(--green-deep)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.background = "var(--green)"; }}
+      {...rest}>
+      {children}<ArrowRight />
+    </Tag>
+  );
+}
+
+function GhostBtn({ children, onClick, href, ...rest }) {
+  const Tag = href ? "a" : "button";
+  return (
+    <Tag href={href} onClick={onClick} style={{
+      display: "inline-flex", alignItems: "center", gap: 6, padding: "14px 4px",
+      background: "transparent", color: "var(--green-deep)", border: "none",
+      borderBottom: "1.5px solid var(--green-deep)", fontSize: 15, fontWeight: 500, borderRadius: 0,
+    }} {...rest}>{children}</Tag>
+  );
+}
+
+function ArrowRight({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SectionLabel({ no, children }) {
+  return (
+    <div style={{ display: "inline-flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+      <span style={{ fontSize: 13, color: "var(--green)", fontWeight: 600, letterSpacing: "0.1em" }}>{no}</span>
+      <span style={{ display: "inline-block", width: 28, height: 1, background: "var(--green)", opacity: 0.5 }} />
+      <span style={{ fontSize: 13, color: "var(--ink-mute)", letterSpacing: "0.18em", textTransform: "uppercase" }}>{children}</span>
+    </div>
+  );
+}
+
+function SectionTitle({ children, jp, en }) {
+  return (
+    <h2 style={{ margin: 0, marginBottom: 32, fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", letterSpacing: "-0.01em", lineHeight: 1.3 }}>
+      {jp ? <span style={{ display: "block" }}>{jp}</span> : null}
+      {en ? <span style={{ display: "block", fontFamily: "Fraunces, serif", fontStyle: "italic", fontWeight: 400, fontSize: 16, color: "var(--green)", letterSpacing: "0.04em", marginTop: 6 }}>{en}</span> : null}
+      {children}
+    </h2>
+  );
+}
+
+function LeafDeco({ x, y, size = 80, rotate = 0, opacity = 0.15, color = "var(--green-light)" }) {
+  return (
+    <svg style={{ position: "absolute", left: x, top: y, transform: `rotate(${rotate}deg)`, opacity, pointerEvents: "none" }} width={size} height={size} viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M15 85C15 45 40 18 88 12C82 56 56 82 15 85Z" fill={color} />
+      <path d="M15 85C28 70 45 55 75 38" stroke="var(--bg)" strokeWidth="2" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+function TopNav() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const navItems = [
+    { id: "about", label: "About" },
+    { id: "services", label: "Services" },
+    { id: "works", label: "Works" },
+    { id: "process", label: "Process" },
+    { id: "contact", label: "Contact" },
+  ];
+  return (
+    <header style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+      background: scrolled ? "rgba(249,246,241,0.85)" : "transparent",
+      backdropFilter: scrolled ? "blur(10px)" : "none",
+      WebkitBackdropFilter: scrolled ? "blur(10px)" : "none",
+      borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
+      transition: "all .3s ease",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "18px clamp(20px, 5vw, 48px)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Logo />
+        <nav style={{ display: "flex", alignItems: "center", gap: 28 }} className="topnav-links">
+          {navItems.map((n) => (
+            <a key={n.id} href={"#" + n.id} onClick={(e) => { e.preventDefault(); smoothScrollTo(n.id); }}
+               style={{ fontSize: 14, color: "var(--ink-mute)", fontWeight: 500 }}>{n.label}</a>
+          ))}
+          <a href="#contact" className="topnav-cta" onClick={(e) => { e.preventDefault(); smoothScrollTo("contact"); }}
+             style={{ fontSize: 14, fontWeight: 600, padding: "10px 20px", background: "var(--green)", color: "#fff", borderRadius: 999 }}>
+            お問い合わせ
+          </a>
+        </nav>
+      </div>
+      <style>{`@media (max-width: 720px) { .topnav-links a:not(.topnav-cta) { display: none; } }`}</style>
+    </header>
+  );
+}
+
+Object.assign(window, { useReveal, smoothScrollTo, LeafMark, Logo, PrimaryBtn, GhostBtn, ArrowRight, SectionLabel, SectionTitle, LeafDeco, TopNav });
+</script>
+
+<script type="text/babel">
+// ─── sections.jsx ─────────────────────────────────────────────────────────────
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+      <path d="M3 7.5l3 3 5-7" stroke="var(--green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+
+function HeroBadges() {
+  const items = ["まずデザインを提案", "修正即対応", "AI活用で低コスト"];
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 28 }}>
+      {items.map((t) => (
+        <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 16px", background: "var(--green-mist)", color: "var(--green-deep)", borderRadius: 999, fontSize: 13, fontWeight: 500 }}>
+          <CheckIcon /> {t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function HeroCopy() {
+  return (
+    <>
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "0.05em", color: "var(--ink)" }}>AIデザイン工房</div>
+        <div style={{ fontSize: 13, fontWeight: 500, color: "#2D6A4F", marginTop: 5, letterSpacing: "0.02em" }}>小さな会社のための、1ページで集客するAIサイト制作。</div>
+      </div>
+      <h1 style={{ margin: 0, fontSize: "clamp(40px, 6.5vw, 76px)", fontWeight: 700, lineHeight: 1.18, letterSpacing: "-0.02em" }}>
+        見てから、<br />決めてください。
+      </h1>
+      <p style={{ marginTop: 28, fontSize: "clamp(16px, 1.6vw, 19px)", color: "var(--ink-mute)", maxWidth: 540, lineHeight: 1.85 }}>
+        事業内容だけで、デザインをお届けします。<br />
+        まず完成イメージを見て、気に入ったら進めましょう。
+      </p>
+    </>
+  );
+}
+
+function HeroCTAs() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 28, flexWrap: "wrap", marginTop: 40 }}>
+      <PrimaryBtn onClick={() => smoothScrollTo("contact")}>事業内容を送る</PrimaryBtn>
+      <GhostBtn href="#process" onClick={(e) => { e.preventDefault(); smoothScrollTo("process"); }}>どうやって作るの？ →</GhostBtn>
+    </div>
+  );
+}
+
+function HeroVisual() {
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 460, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <svg viewBox="0 0 500 500" style={{ position: "relative", width: "min(520px, 100%)", maxWidth: "100%", height: "auto" }} aria-hidden="true">
+        <defs>
+          <clipPath id="pcClip"><rect x="20" y="50" width="360" height="240" rx="12"/></clipPath>
+        </defs>
+
+        <path d="M390 20 C390 20 490 90 455 210 C420 330 305 365 275 445" stroke="#EAF4EC" strokeWidth="80" strokeLinecap="round" fill="none" opacity="0.7"/>
+
+        {/* === PC BROWSER === */}
+        <rect x="24" y="54" width="360" height="240" rx="14" fill="#2D6A4F" opacity="0.07"/>
+        <rect x="20" y="50" width="360" height="240" rx="12" fill="white"/>
+        <g clipPath="url(#pcClip)">
+          {/* Chrome bar — appears first */}
+          <g opacity="0">
+            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.2s" fill="freeze"/>
+            <rect x="20" y="50" width="360" height="32" fill="#EAF4EC"/>
+            <circle cx="40" cy="66" r="5" fill="#52B788"/>
+            <circle cx="55" cy="66" r="5" fill="#95D5B2"/>
+            <circle cx="70" cy="66" r="5" fill="#D4ECDF"/>
+            <rect x="88" y="58" width="180" height="16" rx="8" fill="white" opacity="0.85"/>
+            <circle cx="100" cy="66" r="3.5" fill="#52B788" opacity="0.5"/>
+            <rect x="110" y="63" width="52" height="6" rx="3" fill="#2D6A4F" opacity="0.18"/>
+          </g>
+          {/* Site nav header */}
+          <g opacity="0">
+            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.5s" fill="freeze"/>
+            <rect x="20" y="82" width="360" height="34" fill="#2D6A4F"/>
+            <circle cx="38" cy="99" r="7" fill="#52B788"/>
+            <rect x="51" y="96" width="44" height="6" rx="3" fill="white" opacity="0.7"/>
+            <rect x="242" y="96" width="26" height="6" rx="3" fill="white" opacity="0.35"/>
+            <rect x="277" y="96" width="26" height="6" rx="3" fill="white" opacity="0.35"/>
+            <rect x="312" y="96" width="26" height="6" rx="3" fill="white" opacity="0.35"/>
+            <rect x="347" y="90" width="26" height="18" rx="9" fill="#52B788"/>
+          </g>
+          {/* Body background + blob */}
+          <g opacity="0">
+            <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="0.7s" fill="freeze"/>
+            <rect x="20" y="116" width="360" height="174" fill="#F9F6F1"/>
+            <ellipse cx="308" cy="195" rx="65" ry="60" fill="#EAF4EC"/>
+            <path d="M283 228 Q308 192 350 205 Q336 242 283 228Z" fill="#95D5B2" opacity="0.55"/>
+          </g>
+          {/* Hero text lines */}
+          <g opacity="0">
+            <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.9s" fill="freeze"/>
+            <rect x="42" y="140" width="155" height="13" rx="4" fill="#1F4D3A" opacity="0.75"/>
+            <rect x="42" y="161" width="185" height="13" rx="4" fill="#1F4D3A" opacity="0.65"/>
+            <rect x="42" y="181" width="130" height="8" rx="3" fill="#52B788" opacity="0.45"/>
+            <rect x="42" y="195" width="155" height="8" rx="3" fill="#52B788" opacity="0.35"/>
+          </g>
+          {/* CTA button */}
+          <g opacity="0">
+            <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="1.2s" fill="freeze"/>
+            <rect x="42" y="213" width="110" height="28" rx="14" fill="#2D6A4F"/>
+            <rect x="58" y="224" width="66" height="6" rx="3" fill="white" opacity="0.8"/>
+            <path d="M138 224 L144 227 L138 230" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.8"/>
+          </g>
+        </g>
+        <rect x="20" y="50" width="360" height="240" rx="12" fill="none" stroke="#C8E6D4" strokeWidth="1.5"/>
+
+        {/* === SMARTPHONE — floating + sequential reveal === */}
+        {/* Wrap in <g> for float; use nested <svg> so clipPath moves with the phone */}
+        <g opacity="0">
+          <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.4s" fill="freeze"/>
+          <animateTransform attributeName="transform" type="translate"
+            values="0,0; 0,-10; 0,0" dur="3.2s" begin="1.8s" repeatCount="indefinite"
+            calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+          {/* Shadow */}
+          <rect x="283" y="226" width="130" height="245" rx="22" fill="#2D6A4F" opacity="0.09"/>
+          {/* Frame background */}
+          <rect x="278" y="220" width="130" height="245" rx="20" fill="white"/>
+          {/* Nested SVG: local coords so clipPath follows the animation */}
+          <svg x="278" y="220" width="130" height="245">
+            <defs>
+              <clipPath id="phoneClipL"><rect x="0" y="0" width="130" height="245" rx="20"/></clipPath>
+            </defs>
+            <g clipPath="url(#phoneClipL)">
+              {/* Status bar + nav header */}
+              <g opacity="0">
+                <animate attributeName="opacity" from="0" to="1" dur="0.4s" begin="0.5s" fill="freeze"/>
+                <rect x="0" y="0" width="130" height="26" fill="#EAF4EC"/>
+                <circle cx="65" cy="13" r="3" fill="#B8D8CA"/>
+                <rect x="0" y="26" width="130" height="26" fill="#2D6A4F"/>
+                <circle cx="14" cy="39" r="5" fill="#52B788"/>
+                <rect x="23" y="36" width="28" height="6" rx="3" fill="white" opacity="0.7"/>
+                <rect x="109" y="33" width="14" height="2" rx="1" fill="white" opacity="0.6"/>
+                <rect x="109" y="38" width="14" height="2" rx="1" fill="white" opacity="0.6"/>
+                <rect x="109" y="43" width="14" height="2" rx="1" fill="white" opacity="0.6"/>
+              </g>
+              {/* Body background */}
+              <g opacity="0">
+                <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="0.8s" fill="freeze"/>
+                <rect x="0" y="52" width="130" height="173" fill="#F9F6F1"/>
+                <ellipse cx="82" cy="125" rx="38" ry="34" fill="#EAF4EC"/>
+              </g>
+              {/* Text + CTA */}
+              <g opacity="0">
+                <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="1.1s" fill="freeze"/>
+                <rect x="14" y="74" width="88" height="9" rx="3" fill="#1F4D3A" opacity="0.75"/>
+                <rect x="14" y="89" width="96" height="9" rx="3" fill="#1F4D3A" opacity="0.65"/>
+                <rect x="14" y="103" width="70" height="7" rx="3" fill="#52B788" opacity="0.45"/>
+                <rect x="14" y="116" width="82" height="20" rx="10" fill="#2D6A4F"/>
+                <rect x="30" y="124" width="50" height="4" rx="2" fill="white" opacity="0.8"/>
+              </g>
+              {/* Home indicator */}
+              <g opacity="0">
+                <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.4s" fill="freeze"/>
+                <rect x="0" y="225" width="130" height="20" fill="#F9F6F1"/>
+                <rect x="40" y="231" width="50" height="5" rx="2.5" fill="#C8E6D4"/>
+              </g>
+            </g>
+          </svg>
+          {/* Frame outline (drawn over content) */}
+          <rect x="278" y="220" width="130" height="245" rx="20" fill="none" stroke="#C8E6D4" strokeWidth="1.5"/>
+        </g>
+      </svg>
+
+      <div style={{ position: "absolute", bottom: "8%", left: "-6%", background: "#fff", padding: "14px 18px", borderRadius: 16, boxShadow: "0 12px 32px -10px rgba(26,26,26,0.15)", fontSize: 13, display: "flex", alignItems: "center", gap: 10, maxWidth: 220 }}>
+        <span style={{ width: 8, height: 8, borderRadius: 999, background: "var(--green-light)", flexShrink: 0 }} />
+        <span style={{ color: "var(--ink)", lineHeight: 1.5 }}>このサイトも<br /><strong>AIで制作</strong>しています</span>
+      </div>
+    </div>
+  );
+}
+
+function HeroVariantA() {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 64, alignItems: "center", minHeight: "min(86vh, 820px)", paddingTop: 80 }} className="hero-grid">
+      <div className="reveal">
+        <span style={{ display: "inline-block", fontSize: 13, color: "var(--green)", fontWeight: 600, letterSpacing: "0.16em", marginBottom: 24 }}>AI × WEB DESIGN</span>
+        <HeroCopy />
+        <HeroCTAs />
+        <HeroBadges />
+      </div>
+      <div className="reveal" style={{ position: "relative", height: "100%", minHeight: 460 }}>
+        <HeroVisual />
+      </div>
+      <style>{`@media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; padding-top: 100px !important; } .hero-grid > div:last-child { min-height: 320px !important; } }`}</style>
+    </div>
+  );
+}
+
+function HeroVariantB() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", minHeight: "min(86vh, 820px)", paddingTop: 120, position: "relative" }}>
+      <LeafDeco x="6%" y="18%" size={120} rotate={-30} opacity={0.18} />
+      <LeafDeco x="auto" y="22%" size={90} rotate={45} opacity={0.15} color="var(--green)" />
+      <div className="reveal" style={{ maxWidth: 880 }}>
+        <span style={{ display: "inline-block", fontSize: 13, color: "var(--green)", fontWeight: 600, letterSpacing: "0.16em", marginBottom: 24 }}>AI × WEB DESIGN</span>
+        <h1 style={{ margin: 0, fontSize: "clamp(40px, 7vw, 88px)", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.02em" }}>見てから、<br />決めてください。</h1>
+        <p style={{ marginTop: 28, fontSize: "clamp(16px, 1.6vw, 19px)", color: "var(--ink-mute)", lineHeight: 1.85, maxWidth: 540, marginLeft: "auto", marginRight: "auto" }}>
+          事業内容だけで、デザインをお届けします。<br />まず完成イメージを見て、気に入ったら進めましょう。
+        </p>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 28, flexWrap: "wrap", marginTop: 40 }}>
+          <PrimaryBtn onClick={() => smoothScrollTo("contact")}>事業内容を送る</PrimaryBtn>
+          <GhostBtn href="#process" onClick={(e) => { e.preventDefault(); smoothScrollTo("process"); }}>どうやって作るの？ →</GhostBtn>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}><HeroBadges /></div>
+      </div>
+    </div>
+  );
+}
+
+function HeroVariantC() {
+  return (
+    <div style={{ position: "relative", minHeight: "min(86vh, 820px)", paddingTop: 100, paddingBottom: 100 }}>
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ position: "absolute", left: 0, right: 0, bottom: 0, width: "100%", height: 240, opacity: 0.55, pointerEvents: "none" }} aria-hidden="true">
+        <path d="M0 200 Q360 100 720 180 T1440 140 L1440 320 L0 320 Z" fill="var(--green-light)" opacity="0.4" />
+        <path d="M0 240 Q360 160 720 220 T1440 200 L1440 320 L0 320 Z" fill="var(--green)" opacity="0.18" />
+      </svg>
+      <LeafDeco x="auto" y="14%" size={70} rotate={20} opacity={0.2} />
+      <div className="reveal" style={{ position: "relative", maxWidth: 760 }}>
+        <span style={{ display: "inline-block", fontSize: 13, color: "var(--green)", fontWeight: 600, letterSpacing: "0.16em", marginBottom: 24 }}>AI × WEB DESIGN</span>
+        <HeroCopy />
+        <HeroCTAs />
+        <HeroBadges />
+      </div>
+    </div>
+  );
+}
+
+function Hero({ layout }) {
+  return (
+    <section id="top" style={{ position: "relative", padding: "0 clamp(20px, 5vw, 48px)", maxWidth: 1240, margin: "0 auto", overflow: "visible" }}>
+      {layout === "centered" && <HeroVariantB />}
+      {layout === "wave" && <HeroVariantC />}
+      {(!layout || layout === "split") && <HeroVariantA />}
+    </section>
+  );
+}
+
+// ─── About ────────────────────────────────────────────────────────────────────
+
+function StatCard({ num, label }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: "var(--radius-card)", padding: "28px 22px" }}>
+      <div style={{ fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 700, color: "var(--green-deep)", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{num}</div>
+      <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-mute)", letterSpacing: "0.02em" }}>{label}</div>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <section id="about" style={{ padding: "clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px)", position: "relative" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div className="reveal">
+          <SectionLabel no="01">About</SectionLabel>
+          <SectionTitle jp="AIで、デザインの常識を" en="A new way to start" />
+          <span style={{ display: "block", fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, marginTop: -22, marginBottom: 32, letterSpacing: "-0.01em" }}>ちょっとだけ変えました。</span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start" }} className="about-grid">
+          <div className="reveal" style={{ fontSize: 16, lineHeight: 2, color: "var(--ink)" }}>
+            <p style={{ marginTop: 0 }}>「ホームページが必要だけど、何から始めればいいか分からない。」<br />「見積もりを取っても、出来上がりまで想像できない。」</p>
+            <p>そんな声をたくさん聞いてきました。<br />だから、<strong style={{ color: "var(--green-deep)" }}>順番を変えました。</strong></p>
+            <p>事業内容を教えてもらえれば、<br />まず<strong>完成イメージを画像でお届け</strong>します。<br />気に入ったら、そこから一緒に進めましょう。</p>
+            <p style={{ color: "var(--ink-mute)", fontSize: 14, marginTop: 32, paddingTop: 24, borderTop: "1px dashed var(--line)" }}>
+              ※ ちなみに、<strong>このサイト自体もAIで制作</strong>しています。<br />実際のクオリティを、まずはこのサイトで体感してみてください。
+            </p>
+          </div>
+          <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <StatCard num="1日" label="最短デザイン提案" />
+            <StatCard num="0円" label="提案までの費用" />
+            <StatCard num="当日" label="最短当日に修正対応" />
+            <StatCard num="1名" label="相談から納品まで一貫対応" />
+          </div>
+        </div>
+      </div>
+      <style>{`@media (max-width: 880px) { .about-grid { grid-template-columns: 1fr !important; gap: 40px !important; } }`}</style>
+    </section>
+  );
+}
+
+// ─── Services ─────────────────────────────────────────────────────────────────
+
+function ServiceIcon({ kind }) {
+  if (kind === "design") return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect x="5" y="5" width="22" height="22" rx="4" stroke="var(--green)" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="2.5" fill="var(--green-light)" />
+      <path d="M5 22 L12 15 L20 22 L27 17" stroke="var(--green)" strokeWidth="1.6" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+  if (kind === "code") return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M11 11 L6 16 L11 21" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M21 11 L26 16 L21 21" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M18 8 L14 24" stroke="var(--green-light)" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M5 24 L11 17 L16 21 L26 9" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <circle cx="26" cy="9" r="2.4" fill="var(--green-light)" />
+      <circle cx="11" cy="17" r="1.8" fill="var(--green)" />
+      <circle cx="16" cy="21" r="1.8" fill="var(--green)" />
+    </svg>
+  );
+}
+
+function Services() {
+  const items = [
+    { no: "01", title: "Webデザイン制作", desc: "事業内容に合わせて、まず完成イメージを画像でお届け。気に入った方向性が見つかるまで、何度でも作り直します。", tags: ["デザイン提案", "ブラッシュアップ", "AI活用"], icon: "design" },
+    { no: "02", title: "サイト実装", desc: "デザインが決まったら、すぐ動くサイトに。スマホ対応・お問い合わせフォーム・SEO基本設定まで含めて納品します。", tags: ["レスポンシブ", "高速表示", "公開サポート"], icon: "code" },
+    { no: "03", title: "マーケティング支援", desc: "作って終わりじゃなく、見てもらえる工夫まで。Google・SNSの運用、改善のヒント、必要なときに相談相手になります。", tags: ["SEO", "SNS運用", "改善提案"], icon: "market" },
+  ];
+  return (
+    <section id="services" style={{ padding: "clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px)", background: "var(--bg-soft)", position: "relative" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div className="reveal" style={{ marginBottom: 56 }}>
+          <SectionLabel no="02">Services</SectionLabel>
+          <SectionTitle jp="できること" en="What I do" />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }} className="service-grid">
+          {items.map((it) => (
+            <article key={it.no} className="reveal" style={{ background: "#fff", borderRadius: "var(--radius-card)", padding: 36, display: "flex", flexDirection: "column", gap: 12, border: "1px solid var(--line)" }}>
+              <div style={{ width: 64, height: 64, borderRadius: 18, background: "var(--green-mist)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                <ServiceIcon kind={it.icon} />
+              </div>
+              <div style={{ fontSize: 12, color: "var(--green)", fontWeight: 600, letterSpacing: "0.16em" }}>{it.no}</div>
+              <h3 style={{ margin: 0, fontSize: 22, fontWeight: 700, letterSpacing: "-0.01em" }}>{it.title}</h3>
+              <p style={{ margin: 0, fontSize: 14.5, color: "var(--ink-mute)", lineHeight: 1.85 }}>{it.desc}</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 16 }}>
+                {it.tags.map((t) => (<span key={t} style={{ fontSize: 12, padding: "5px 12px", background: "var(--bg)", color: "var(--ink-mute)", borderRadius: 999 }}>{t}</span>))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+      <style>{`@media (max-width: 880px) { .service-grid { grid-template-columns: 1fr !important; } }`}</style>
+    </section>
+  );
+}
+
+// ─── Works ────────────────────────────────────────────────────────────────────
+
+function Works() {
+  return (
+    <section id="works" style={{ padding: "clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px)", position: "relative" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div className="reveal" style={{ marginBottom: 56 }}>
+          <SectionLabel no="03">Works</SectionLabel>
+          <SectionTitle jp="制作実績" en="Featured work" />
+        </div>
+        <div className="reveal works-grid" style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 56, alignItems: "center" }}>
+          <div style={{ position: "relative" }}>
+            <div style={{ position: "absolute", top: -24, left: -24, width: 120, height: 120, borderRadius: "50%", background: "var(--green-light)", opacity: 0.25, zIndex: 0 }} />
+            <div style={{ position: "relative", borderRadius: "var(--radius-card)", overflow: "hidden", boxShadow: "0 24px 60px -20px rgba(26,26,26,0.20)", border: "1px solid var(--line)", background: "#fff", zIndex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "12px 16px", background: "#F2EDE4", borderBottom: "1px solid var(--line)" }}>
+                <span style={{ width: 10, height: 10, borderRadius: 999, background: "#E5C5A8" }} />
+                <span style={{ width: 10, height: 10, borderRadius: 999, background: "#E5D7A8" }} />
+                <span style={{ width: 10, height: 10, borderRadius: 999, background: "#A8D9B6" }} />
+                <span style={{ marginLeft: 12, fontSize: 12, color: "var(--ink-mute)" }}>atelier-nico.jp</span>
+              </div>
+              <div style={{ padding: "32px 28px", background: "var(--bg)" }}>
+                <div style={{ fontSize: 11, color: "var(--green)", fontWeight: 600, letterSpacing: "0.16em", marginBottom: 8 }}>AI × WEB DESIGN</div>
+                <div style={{ fontSize: 28, fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.01em" }}>見てから、<br />決めてください。</div>
+                <div style={{ marginTop: 12, fontSize: 12, color: "var(--ink-mute)" }}>事業内容だけで、デザインをお届けします。</div>
+                <div style={{ marginTop: 16, display: "flex", gap: 12, alignItems: "center" }}>
+                  <span style={{ display: "inline-block", padding: "8px 14px", background: "var(--green)", color: "#fff", borderRadius: 999, fontSize: 11 }}>事業内容を送る →</span>
+                  <span style={{ fontSize: 11, color: "var(--green-deep)", borderBottom: "1px solid var(--green-deep)" }}>どうやって作るの？</span>
+                </div>
+              </div>
+            </div>
+            <div style={{ position: "absolute", bottom: -16, right: -16, background: "#fff", padding: "10px 16px", borderRadius: 12, boxShadow: "0 8px 20px -6px rgba(26,26,26,0.15)", fontSize: 12, fontWeight: 600, color: "var(--green-deep)", zIndex: 2, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 6, height: 6, borderRadius: 999, background: "var(--green-light)" }} />
+              制作期間：3日
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 13, color: "var(--ink-mute)", letterSpacing: "0.04em", marginBottom: 12 }}>CASE 01 / 自社サイト</div>
+            <h3 style={{ margin: 0, fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 700, lineHeight: 1.4, letterSpacing: "-0.01em" }}>このポートフォリオサイト</h3>
+            <p style={{ marginTop: 16, color: "var(--ink-mute)", lineHeight: 1.9, fontSize: 15 }}>
+              いま見てくださっている、このサイトそのものが制作実績です。<br />ヒアリングからデザイン・実装まで、AIを活用して短期間で仕上げました。表現のクオリティ、読みやすさ、操作感をそのまま体験してください。
+            </p>
+            <dl style={{ margin: "28px 0 0", display: "grid", gridTemplateColumns: "auto 1fr", gap: "12px 20px", fontSize: 14 }}>
+              <dt style={{ color: "var(--ink-mute)" }}>制作期間</dt><dd style={{ margin: 0 }}>3日</dd>
+              <dt style={{ color: "var(--ink-mute)" }}>使用ツール</dt><dd style={{ margin: 0 }}>Claude Design / Claude Code</dd>
+              <dt style={{ color: "var(--ink-mute)" }}>対象</dt><dd style={{ margin: 0 }}>個人事業 / フリーランス</dd>
+            </dl>
+            <div style={{ marginTop: 32, padding: 20, background: "var(--green-mist)", borderRadius: 16, fontSize: 14, color: "var(--green-deep)", lineHeight: 1.8 }}>
+              <strong>次の事例は、あなたのサイトかもしれません。</strong><br />
+              <span style={{ color: "var(--ink-mute)", fontSize: 13 }}>掲載OKの場合、Worksに事例として残します（任意）</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>{`@media (max-width: 880px) { .works-grid { grid-template-columns: 1fr !important; gap: 80px !important; } }`}</style>
+    </section>
+  );
+}
+
+// ─── Process ──────────────────────────────────────────────────────────────────
+
+function ProcessIcon({ kind }) {
+  const wrap = { width: 48, height: 48, borderRadius: 14, background: "var(--green-mist)", display: "flex", alignItems: "center", justifyContent: "center" };
+  const icons = {
+    send: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12L21 4L13 22L11 13L3 12Z" stroke="var(--green-deep)" strokeWidth="1.6" strokeLinejoin="round" fill="none" /></svg>,
+    design: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="2" stroke="var(--green-deep)" strokeWidth="1.6" /><path d="M4 10 H20" stroke="var(--green-deep)" strokeWidth="1.6" /><circle cx="7" cy="7.5" r="0.8" fill="var(--green-deep)" /><path d="M8 14 L11 17 L16 12" stroke="var(--green-light)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>,
+    ok: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="var(--green-deep)" strokeWidth="1.6" /><path d="M8 12 L11 15 L16 9" stroke="var(--green-light)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>,
+    ship: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 8 L21 16 L12 21 L3 16 L3 8 Z" stroke="var(--green-deep)" strokeWidth="1.6" strokeLinejoin="round" /><path d="M3 8 L12 13 L21 8" stroke="var(--green-deep)" strokeWidth="1.6" strokeLinejoin="round" /><path d="M12 13 V21" stroke="var(--green-deep)" strokeWidth="1.6" /></svg>,
+  };
+  return <div style={wrap}>{icons[kind]}</div>;
+}
+
+function Process() {
+  const steps = [
+    { no: "01", title: "情報を送る", desc: "会社名・事業内容・URLなどを送るだけでOK。フォームでもLINEでも、書きやすい方で大丈夫です。", icon: "send" },
+    { no: "02", title: "デザイン提案", desc: "事業内容をもとに、まず完成イメージを画像でお届けします。気に入らなければここで終了、費用もかかりません。", icon: "design" },
+    { no: "03", title: "気に入ったらGO", desc: "進めることになったら、ここから初めて詳しいヒアリングを開始。お見積もりもこのタイミングです。", icon: "ok" },
+    { no: "04", title: "納品・公開", desc: "実装してテストして、公開までサポート。公開後の小さな修正や相談も、気軽にどうぞ。", icon: "ship" },
+  ];
+  const cardStyle = { background: "#fff", borderRadius: "var(--radius-card)", padding: 28, border: "1px solid var(--line)", position: "relative", minHeight: 280, display: "flex", flexDirection: "column" };
+  return (
+    <section id="process" style={{ padding: "clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px)", background: "var(--bg-soft)", position: "relative" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div className="reveal" style={{ marginBottom: 56 }}>
+          <SectionLabel no="04">Process</SectionLabel>
+          <SectionTitle jp="お届けまでの流れ" en="How it works" />
+          <p style={{ marginTop: -16, color: "var(--ink-mute)", maxWidth: 600, fontSize: 15, lineHeight: 1.9 }}>
+            STEP 02までは無料です。「見てから、決めてください。」をそのままの順番で。
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, position: "relative" }} className="process-grid">
+          {steps.map((s, i) => (
+            <article key={s.no} className="reveal" style={cardStyle}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+                <ProcessIcon kind={s.icon} />
+                {i < steps.length - 1 && (
+                  <span style={{ position: "absolute", right: -22, top: 36, width: 28, color: "var(--green)", opacity: 0.5, display: "flex", alignItems: "center", justifyContent: "center" }} className="process-connector" aria-hidden="true">
+                    <ArrowRight size={14} />
+                  </span>
+                )}
+              </div>
+              <div style={{ fontSize: 12, color: "var(--green)", fontWeight: 600, letterSpacing: "0.16em" }}>STEP {s.no}</div>
+              <h3 style={{ margin: "8px 0 12px", fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>{s.title}</h3>
+              <p style={{ margin: 0, fontSize: 14, color: "var(--ink-mute)", lineHeight: 1.85, flex: 1 }}>{s.desc}</p>
+              {i < 2 && (
+                <span style={{ marginTop: 16, alignSelf: "flex-start", fontSize: 11, padding: "4px 10px", background: "var(--green-mist)", color: "var(--green-deep)", borderRadius: 999, fontWeight: 600, letterSpacing: "0.04em" }}>ここまで無料</span>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 980px) { .process-grid { grid-template-columns: repeat(2, 1fr) !important; } .process-connector { display: none !important; } }
+        @media (max-width: 540px) { .process-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
+    </section>
+  );
+}
+
+// ─── Contact ──────────────────────────────────────────────────────────────────
+
+const inputStyle = {
+  width: "100%", padding: "14px 16px", background: "var(--bg)", border: "1px solid var(--line)",
+  borderRadius: 12, fontSize: 15, fontFamily: "inherit", color: "var(--ink)", outline: "none", transition: "border-color .2s",
+};
+
+function Field({ label, required, hint, children }) {
+  return (
+    <label style={{ display: "block", marginBottom: 18 }}>
+      <span style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, fontSize: 13, fontWeight: 600 }}>
+        {label}
+        {required && <span style={{ fontSize: 10, padding: "2px 8px", background: "var(--green-mist)", color: "var(--green-deep)", borderRadius: 999, fontWeight: 600 }}>必須</span>}
+        {hint && <span style={{ fontSize: 11, color: "var(--ink-mute)", fontWeight: 400 }}>{hint}</span>}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+function Contact() {
+  const [form, setForm] = useState({ name: "", contact: "", biz: "", deadline: "" });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const submit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "89c5e744-18ad-4d50-9515-4a82e2301b10",
+          subject: "【AIデザイン工房】お問い合わせが届きました",
+          from_name: "AIデザイン工房 フォーム",
+          name: form.name,
+          email: form.contact,
+          "事業内容": form.biz,
+          "サイトURL": form.deadline || "未入力",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setError("送信に失敗しました。時間をおいて再度お試しください。");
+      }
+    } catch {
+      setError("通信エラーが発生しました。インターネット接続を確認してください。");
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <section id="contact" style={{ padding: "clamp(80px, 12vw, 140px) clamp(20px, 5vw, 48px)", paddingBottom: 120, position: "relative" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div className="reveal" style={{ textAlign: "center", marginBottom: 56 }}>
+          <SectionLabel no="05">Contact</SectionLabel>
+          <SectionTitle jp="まずは気軽に、ご相談ください" en="Let's talk" />
+          <p style={{ color: "var(--ink-mute)", maxWidth: 560, margin: "0 auto", fontSize: 15, lineHeight: 1.9 }}>
+            「ちょっと話を聞いてみたい」だけでも歓迎です。<br />事業内容を教えていただければ、まずデザイン案をお届けします。
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 40, alignItems: "stretch" }} className="contact-grid">
+          <div className="reveal" style={{ background: "#fff", borderRadius: "var(--radius-card)", padding: "clamp(24px, 4vw, 40px)", border: "1px solid var(--line)" }}>
+            {!submitted ? (
+              <form onSubmit={submit}>
+                <h3 style={{ margin: 0, marginBottom: 24, fontSize: 18, fontWeight: 700 }}>フォームから送る</h3>
+                <Field label="お名前" required><input value={form.name} onChange={update("name")} required placeholder="山田 太郎" style={inputStyle} /></Field>
+                <Field label="連絡先（メール）" required><input type="email" value={form.contact} onChange={update("contact")} required placeholder="example@email.com" style={inputStyle} /></Field>
+                <Field label="事業内容" required hint="お店・サービスの内容をざっくり書いてください">
+                  <textarea value={form.biz} onChange={update("biz")} required rows={5} placeholder="例：自家焙煎のコーヒー豆を販売している小さなお店です。週末はカフェも営業しています。" style={{ ...inputStyle, minHeight: 120, resize: "vertical", fontFamily: "inherit" }} />
+                </Field>
+                <Field label="サイトURL" hint="既存サイトがあれば参考に">
+                  <input type="url" value={form.deadline} onChange={update("deadline")} placeholder="https://example.com" style={inputStyle} />
+                </Field>
+                {error && (
+                  <p style={{ marginTop: 12, marginBottom: 0, fontSize: 13, color: "#c0392b", textAlign: "center" }}>{error}</p>
+                )}
+                <button type="submit" disabled={loading} style={{ marginTop: 16, width: "100%", padding: "18px 24px", background: loading ? "var(--ink-mute)" : "var(--green)", color: "#fff", border: "none", borderRadius: 999, fontSize: 16, fontWeight: 600, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, boxShadow: "0 8px 24px -8px rgba(45,106,79,0.45)", cursor: loading ? "not-allowed" : "pointer" }}>
+                  {loading ? "送信中..." : <>{`事業内容を送る`} <ArrowRight /></>}
+                </button>
+                <p style={{ marginTop: 16, marginBottom: 0, fontSize: 12, color: "var(--ink-mute)", textAlign: "center" }}>個人情報は提案以外の目的では使用しません。</p>
+              </form>
+            ) : (
+              <div style={{ textAlign: "center", padding: "40px 0" }}>
+                <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--green-mist)", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 14 L12 20 L22 8" stroke="var(--green)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </div>
+                <h3 style={{ margin: 0, marginBottom: 12, fontSize: 22, fontWeight: 700 }}>送信ありがとうございます</h3>
+                <p style={{ margin: 0, color: "var(--ink-mute)", lineHeight: 1.8 }}>内容を確認のうえ、3営業日以内に<br />デザイン提案をお届けします。</p>
+                <button onClick={() => { setSubmitted(false); setForm({ name: "", contact: "", biz: "", deadline: "" }); }} style={{ marginTop: 24, padding: "10px 20px", background: "transparent", border: "1px solid var(--line)", borderRadius: 999, color: "var(--ink-mute)", fontSize: 13 }}>もう一度送る</button>
+              </div>
+            )}
+          </div>
+          <div className="reveal" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ background: "var(--green-mist)", borderRadius: "var(--radius-card)", padding: 32, flex: 1, display: "flex", flexDirection: "column" }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 11c0-4.4-4-8-9-8s-9 3.6-9 8c0 4 3.2 7.3 7.5 7.9 .3.1.7.2.8.5.1.3.1.7 0 1l-.1.7c-.1.3-.2 1.2 1 .7 1.3-.6 6.9-4.1 8.5-7C20.5 13.6 21 12.3 21 11z" stroke="var(--green-deep)" strokeWidth="1.6" strokeLinejoin="round" /></svg>
+              </div>
+              <h3 style={{ margin: 0, marginBottom: 8, fontSize: 20, fontWeight: 700 }}>LINEで相談する</h3>
+              <p style={{ margin: 0, fontSize: 14, color: "var(--ink-mute)", lineHeight: 1.85, flex: 1 }}>文章を書くのが面倒なときは、こちらが早いです。スマホで気軽に。</p>
+              {/* PC（768px以上）: QRコード表示 */}
+              <div className="line-qr-block" style={{ marginTop: 20, textAlign: "center" }}>
+                <img src="https://qr-official.line.me/gs/M_897nxacg_BW.png?oat_content=qr" alt="LINE QRコード" style={{ width: 140, height: 140, borderRadius: 8 }} />
+                <p style={{ margin: "10px 0 0", fontSize: 12, color: "var(--ink-mute)", lineHeight: 1.7 }}>LINEで相談する<br />スマホで読み込んでください</p>
+              </div>
+              {/* スマホ（767px以下）: 友だち追加ボタン表示 */}
+              <div className="line-btn-block" style={{ marginTop: 20 }}>
+                <a href="https://lin.ee/oo5Sltz">
+                  <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="36" style={{ border: 0 }} />
+                </a>
+              </div>
+            </div>
+            <div style={{ background: "#fff", borderRadius: "var(--radius-card)", padding: 24, border: "1px solid var(--line)" }}>
+              <div style={{ fontSize: 12, color: "var(--ink-mute)", letterSpacing: "0.06em", marginBottom: 6 }}>または、直接メールで</div>
+              <a href="mailto:hello@atelier-nico.jp" style={{ fontSize: 16, fontWeight: 600, color: "var(--green-deep)", borderBottom: "1px solid var(--green-deep)" }}>hello@atelier-nico.jp</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 880px) { .contact-grid { grid-template-columns: 1fr !important; } }
+        @media (min-width: 768px) { .line-qr-block { display: block; } .line-btn-block { display: none; } }
+        @media (max-width: 767px) { .line-qr-block { display: none; } .line-btn-block { display: block; } }
+      `}</style>
+    </section>
+  );
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+function Footer({ name }) {
+  return (
+    <footer style={{ borderTop: "1px solid var(--line)", padding: "48px clamp(20px, 5vw, 48px) 32px", background: "var(--bg)" }}>
+      <div className="footer-inner" style={{ maxWidth: 1200, margin: "0 auto", display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "space-between", alignItems: "flex-end" }}>
+        <div>
+          <Logo name={name} />
+          <p style={{ marginTop: 14, fontSize: 13, color: "var(--ink-mute)", maxWidth: 320, lineHeight: 1.8 }}>
+            AIを活用して、中小企業・個人事業主の<br />Webデザインと運用をお手伝いしています。
+          </p>
+        </div>
+        <div className="footer-right" style={{ fontSize: 12, color: "var(--ink-mute)", textAlign: "right" }}>
+          <div>© {new Date().getFullYear()} {name}. Made with AI.</div>
+        </div>
+      </div>
+      <style>{`
+        @media (max-width: 767px) {
+          .footer-inner { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+          .footer-right { text-align: center !important; }
+        }
+      `}</style>
+    </footer>
+  );
+}
+</script>
+
+<script type="text/babel">
+// ─── app.jsx ──────────────────────────────────────────────────────────────────
+
+const { useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "heroLayout": "split",
+  "typography": "noto",
+  "logoName": "AIデザイン工房",
+  "accentTone": "soft"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  useReveal();
+
+  useEffect(() => {
+    const map = { noto: "", maru: "maru", kaku: "kaku", klee: "klee" };
+    document.body.dataset.typo = map[tweaks.typography] || "";
+  }, [tweaks.typography]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (tweaks.accentTone === "deep") {
+      root.style.setProperty("--green", "#1F4D3A");
+      root.style.setProperty("--green-light", "#3D9970");
+      root.style.setProperty("--green-mist", "#DCE8DF");
+    } else if (tweaks.accentTone === "soft") {
+      root.style.setProperty("--green", "#52B788");
+      root.style.setProperty("--green-light", "#95D5B2");
+      root.style.setProperty("--green-mist", "#EAF4EC");
+      root.style.setProperty("--green-deep", "#2D6A4F");
+    } else {
+      root.style.setProperty("--green", "#2D6A4F");
+      root.style.setProperty("--green-light", "#52B788");
+      root.style.setProperty("--green-mist", "#E6F0EA");
+      root.style.setProperty("--green-deep", "#1F4D3A");
+    }
+  }, [tweaks.accentTone]);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".reveal:not(.in)").forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) el.classList.add("in");
+      });
+    });
+  }, [tweaks.heroLayout]);
+
+  return (
+    <>
+      <TopNav />
+      <main>
+        <Hero layout={tweaks.heroLayout} />
+        <About />
+        <Services />
+        <Works />
+        <Process />
+        <Contact />
+      </main>
+      <Footer name={tweaks.logoName} />
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Hero レイアウト" />
+        <TweakRadio
+          label="レイアウト"
+          value={tweaks.heroLayout}
+          onChange={(v) => setTweak("heroLayout", v)}
+          options={[
+            { value: "split", label: "左右分割" },
+            { value: "centered", label: "中央寄せ" },
+            { value: "wave", label: "波模様" },
+          ]}
+        />
+        <TweakSection label="ビジュアル方向性" />
+        <TweakRadio
+          label="トーン"
+          value={tweaks.accentTone}
+          onChange={(v) => setTweak("accentTone", v)}
+          options={[
+            { value: "green", label: "標準" },
+            { value: "deep", label: "深め" },
+            { value: "soft", label: "柔らか" },
+          ]}
+        />
+        <TweakSection label="日本語フォント" />
+        <TweakSelect
+          label="フォント"
+          value={tweaks.typography}
+          onChange={(v) => setTweak("typography", v)}
+          options={[
+            { value: "noto", label: "Noto Sans JP（標準）" },
+            { value: "maru", label: "Zen Maru Gothic（丸み）" },
+            { value: "kaku", label: "Zen Kaku Gothic New" },
+            { value: "klee", label: "Klee One（手書き感）" },
+          ]}
+        />
+        <TweakSection label="屋号" />
+        <TweakText
+          label="屋号"
+          value={tweaks.logoName}
+          onChange={(v) => setTweak("logoName", v)}
+        />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+</body>
+</html>
