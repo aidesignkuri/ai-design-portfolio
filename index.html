@@ -1006,6 +1006,16 @@ function Contact() {
       });
       const data = await res.json();
       if (data.success) {
+        fetch("https://hook.eu1.make.com/fpn4ec7xa6nam1qbbybgqitjij8gxg22", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: form.name,
+            contact: form.contact,
+            biz: form.biz,
+            deadline: form.deadline || "未入力",
+          }),
+        }).catch(() => {});
         setSubmitted(true);
       } else {
         setError("送信に失敗しました。時間をおいて再度お試しください。");
