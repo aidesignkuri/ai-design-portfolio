@@ -963,7 +963,7 @@ function Works() {
         </div>
 
         {/* CASE 03 */}
-        <div className="reveal works-grid" style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 56, alignItems: "center", marginTop: 96 }}>
+        <div className="reveal works-grid works-case03" style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 56, alignItems: "center", marginTop: 96 }}>
           <div style={{ position: "relative" }}>
             <div style={{ position: "absolute", top: -24, left: -24, width: 120, height: 120, borderRadius: "50%", background: "#c8ddf0", opacity: 0.35, zIndex: 0 }} />
             <div style={{ position: "relative", borderRadius: "var(--radius-card)", overflow: "hidden", boxShadow: "0 24px 60px -20px rgba(26,26,26,0.20)", border: "1px solid var(--line)", background: "#fff", zIndex: 1 }}>
@@ -1019,7 +1019,7 @@ function Works() {
         </div>
 
       </div>
-      <style>{`@media (max-width: 880px) { .works-grid { grid-template-columns: 1fr !important; gap: 80px !important; } }`}</style>
+      <style>{`@media (max-width: 880px) { .works-grid { grid-template-columns: 1fr !important; gap: 80px !important; } } @media (max-width: 880px) { .works-case03 > div:first-child { order: 2; } }`}</style>
     </section>
   );
 }
