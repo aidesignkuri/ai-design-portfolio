@@ -1,0 +1,185 @@
+@charset "UTF-8";
+.fv {
+  height: 701px;
+  margin-bottom: 64px;
+}
+.fv__bgcolor {
+  width: 727px;
+  height: 563px;
+  background-color: #4282b8;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+.fv__img {
+  background-image: url(../img/Firefly\ 設計の図面\ 87080\ 1.svg);
+  height: 661px;
+  background-position: center;
+}
+
+.contact-sub {
+  margin-bottom: 170px;
+  position: relative;
+}
+.contact-sub__title {
+  font-size: 40px;
+}
+.contact-sub__inner {
+  padding: 0;
+}
+.contact-sub__text {
+  max-width: 422px;
+}
+.contact-sub__img {
+  position: absolute;
+  top: 0;
+  left: 538px;
+}
+.contact-sub__text {
+  margin-bottom: 64px;
+  line-height: 1.8;
+}
+.contact-sub__btn {
+  display: block;
+  width: 284px;
+  background-color: #4282b8;
+  border-radius: 10px;
+}
+.contact-sub__btn .submit-btn {
+  border: none;
+  color: #fff;
+}
+.contact-sub__btn .submit-btn:hover {
+  background-color: transparent;
+}
+.contact-sub__wrapper {
+  margin-bottom: 17px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+.contact-sub__wrapper .no {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.contact-sub__wrapper .text {
+  display: block;
+}
+.contact-sub__wrapper-input {
+  width: 100%;
+  max-width: 209px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border: 3px solid #4282b8;
+  color: #4282b8;
+  background-color: #fff;
+  position: relative;
+  padding: 4px 0 10px;
+}
+.contact-sub__wrapper-input::after {
+  content: "";
+  width: 52px;
+  height: 1px;
+  background-color: #4282b8;
+  position: absolute;
+  top: 50%;
+  right: -55px;
+}
+.contact-sub__wrapper-output {
+  width: 100%;
+  max-width: 209px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  border: 3px solid #4282b8;
+  color: #fff;
+  background-color: #4282b8;
+  padding: 4px 0 10px;
+}
+.contact-sub__wrapper-left {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 52px;
+  margin-right: clamp(1.25rem, -18.4821428571rem + 30.9523809524vw, 9.375rem);
+  max-width: 470px;
+  width: 100%;
+}
+.contact-sub__wrapper-right .contact__box--number {
+  border-right: none;
+  padding: 0;
+}
+.contact-sub__wrapper-right .contact__box--number .message {
+  margin-bottom: 29px;
+}
+.contact-sub__wrapper-right .contact__box--number .phone-number {
+  padding-bottom: 0;
+  margin-bottom: 14px;
+}
+.contact-sub .btn::before {
+  background-color: #fff;
+}
+
+@media (max-width: 1020px) {
+  .fv {
+    height: 600px;
+  }
+  .fv__img {
+    height: 100%;
+  }
+  .contact-sub {
+    margin-bottom: 50px;
+  }
+  .contact-sub__inner {
+    padding: 0 20px;
+  }
+  .contact-sub__wrapper {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .contact-sub__wrapper-left {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .fv {
+    height: 450px;
+  }
+  .contact-sub__img {
+    width: 58px;
+    height: 86px;
+    left: auto;
+    right: 10px;
+    top: 0;
+  }
+}

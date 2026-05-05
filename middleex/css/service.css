@@ -1,0 +1,195 @@
+@charset "UTF-8";
+.fv {
+  height: 701px;
+  margin-bottom: 54px;
+}
+.fv__bgcolor {
+  width: 727px;
+  height: 563px;
+  background-color: #4282b8;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+.fv__img {
+  background-image: url(../img/Firefly\ 木製の家の模型が机の上にある\ 60602\ 1.jpg);
+  height: 671px;
+  background-position: center;
+}
+
+.service-sub {
+  margin-bottom: 75px;
+  position: relative;
+}
+.service-sub__title {
+  font-size: 40px;
+}
+.service-sub__inner {
+  padding: 0;
+}
+.service-sub__text {
+  max-width: 422px;
+}
+.service-sub__img {
+  position: absolute;
+  top: 0;
+  left: 538px;
+}
+.service-sub__text {
+  margin-bottom: 64px;
+  line-height: 1.8;
+}
+.service-sub__link {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 24px;
+}
+
+.works {
+  margin-bottom: 72px;
+}
+.works__img {
+  margin-bottom: 56px;
+}
+.works__inner {
+  padding: 0 50px;
+}
+.works__title {
+  font-size: 24px;
+  margin-bottom: 39px;
+}
+.works__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 860px;
+  border-top: 1px solid #b1c6dc;
+  padding-top: 20px;
+  margin-bottom: 72px;
+}
+.works__wrapper--left {
+  margin-right: 40px;
+  width: 50%;
+  max-width: 374px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.works__wrapper--left-text {
+  line-height: 1.8;
+  font-size: clamp(1rem, 0.3928571429rem + 0.9523809524vw, 1.25rem);
+}
+.works__wrapper--right {
+  width: 51.8%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.works__wrapper--right-text {
+  margin-bottom: 88px;
+  line-height: 1.8;
+}
+.works__wrapper--text {
+  margin-bottom: 88px;
+  line-height: 1.8;
+}
+.works__wrapper--jirei {
+  max-width: 352px;
+}
+.works__wrapper--img {
+  padding: 20px 0;
+}
+.works .jirei-text {
+  font-size: 14px;
+}
+
+.mb146 {
+  margin-bottom: 146px;
+}
+
+@media (max-width: 1020px) {
+  .fv {
+    height: 600px;
+  }
+  .fv__img {
+    height: 100%;
+  }
+  .service-sub {
+    margin-bottom: 40px;
+  }
+  .service-sub__inner {
+    padding: 0 20px;
+  }
+  .service-sub__img {
+    left: 70%;
+    top: -18%;
+  }
+  .works {
+    margin-bottom: 40px;
+  }
+  .works__inner {
+    padding: 0 20px;
+  }
+}
+@media (max-width: 600px) {
+  .scroll-link {
+    width: 100%;
+  }
+  .fv {
+    height: 450px;
+  }
+  .service-sub__img {
+    width: 58px;
+    height: 86px;
+    left: auto;
+    right: 10px;
+    top: 0;
+  }
+  .service-sub__text {
+    max-width: 100%;
+  }
+  .service-sub__link {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .works__wrapper {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    margin-bottom: 40px;
+  }
+  .works__wrapper--left {
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
+  .works__wrapper--right {
+    width: 100%;
+  }
+  .works__wrapper--text {
+    margin-bottom: 20px;
+  }
+}

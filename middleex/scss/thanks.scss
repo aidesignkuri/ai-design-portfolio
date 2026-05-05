@@ -1,0 +1,179 @@
+@charset "UTF8";
+
+@function rclamp($min, $max, $minViewport, $maxViewport) {
+  $vwScale: ($max - $min) / ($maxViewport - $minViewport);  // vw単位でのスケールを計算
+  $baseOffset: $min - $minViewport * $vwScale;  // 基準となる最小値からのオフセットを計算
+
+  $minRem: $min / 16;  // 最小値をremに変換
+  $maxRem: $max / 16;  // 最大値をremに変換
+  $baseOffsetRem: $baseOffset / 16;  // オフセットをremに変換
+  $vwScaleRem: $vwScale * 100;  // vwスケールを調整
+
+  @return clamp(#{$minRem}rem, #{$baseOffsetRem}rem + #{$vwScaleRem}vw, #{$maxRem}rem);
+}
+
+//fv 
+.fv {
+  height: 701px;
+  margin-bottom: 64px;
+  &__bgcolor {
+    width: 727px;
+    height: 563px;
+    background-color: #4282b8;
+    position: absolute;
+    top: 0;right: 0;
+    z-index: -1;
+  }
+  &__img {
+    background-image: url(../img/Firefly\ 設計の図面\ 87080\ 1.svg);
+    height: 661px;
+    background-position: center;
+  }
+}
+
+//contact-sub
+.contact-sub {
+  margin-bottom: 170px;
+  position: relative;
+  &__title {
+    font-size: 40px;
+  }
+  &__inner {
+    padding: 0;
+  }
+  &__text {
+    max-width: 422px;
+  }
+  &__img {
+    position: absolute;
+    top: 0;
+    left: 538px;
+  }
+  &__text {
+    margin-bottom: 64px;
+    line-height: 1.8;
+  }
+  &__btn {
+    display: block;
+    width: 284px;
+    background-color: #4282b8;
+    border-radius: 10px;
+    .submit-btn {
+      border:  none;
+      color: #fff;
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+  &__wrapper {
+    margin-bottom: 17px;
+    display: flex;
+    align-items: flex-start;
+    .no {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .text {
+      display: block;
+    }
+    &-input {
+      width: 100%;
+      max-width: 209px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #4282b8;
+      color: #4282b8;
+      background-color: #fff;
+      position: relative;
+      padding: 4px 0 10px;
+      &::after {
+        content: "";
+        width: 52px;
+        height: 1px;
+        background-color: #4282b8;
+        position: absolute;
+        top: 50%;
+        right: -55px;
+      }
+    }
+    &-output {
+      width: 100%;
+      max-width: 209px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 3px solid #4282b8;
+      color: #fff;
+      background-color: #4282b8;
+      padding: 4px 0 10px;
+    }
+    &-left {
+      display: flex;
+      gap: 52px;
+      margin-right: rclamp(20, 150, 1020, 1440);
+      max-width: 470px;
+      width: 100%;
+    }
+    &-right {
+      .contact__box--number { 
+        border-right: none;
+        padding: 0;
+        .message {
+          margin-bottom: 29px;
+        }
+        .phone-number {
+          padding-bottom: 0;
+          margin-bottom: 14px;
+        }
+    }
+  }
+ }
+ .btn::before {
+  background-color: #fff;
+ }
+ 
+}
+
+@media (max-width: 1020px) {
+  .fv {
+    height: 600px;
+    &__img {
+      height: 100%;
+    }
+  }
+  //contact-sub
+  .contact-sub {
+    margin-bottom: 50px;
+    &__inner {
+      padding: 0 20px;
+    }
+    &__wrapper {
+     flex-direction: column;
+     &-left {
+       margin-right: 0;
+       margin-bottom: 20px;
+     }
+   }
+ }
+}
+
+@media (max-width: 600px) {
+  .fv {
+    height: 450px;
+  }
+  .contact-sub {
+    &__img {
+      width: 58px;
+      height: 86px;
+      left: auto;
+      right: 10px;
+      top: 0;
+    }
+  }
+}

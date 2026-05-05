@@ -1,0 +1,192 @@
+@charset "UTF8";
+
+@function rclamp($min, $max, $minViewport, $maxViewport) {
+  $vwScale: ($max - $min) / ($maxViewport - $minViewport);  // vw単位でのスケールを計算
+  $baseOffset: $min - $minViewport * $vwScale;  // 基準となる最小値からのオフセットを計算
+
+  $minRem: $min / 16;  // 最小値をremに変換
+  $maxRem: $max / 16;  // 最大値をremに変換
+  $baseOffsetRem: $baseOffset / 16;  // オフセットをremに変換
+  $vwScaleRem: $vwScale * 100;  // vwスケールを調整
+
+  @return clamp(#{$minRem}rem, #{$baseOffsetRem}rem + #{$vwScaleRem}vw, #{$maxRem}rem);
+}
+
+//fv 
+.fv {
+  height: 701px;
+  margin-bottom: 54px;
+  &__bgcolor {
+    width: 727px;
+    height: 563px;
+    background-color: #4282b8;
+    position: absolute;
+    top: 0;right: 0;
+    z-index: -1;
+  }
+  &__img {
+    background-image: url(../img/Firefly\ 木製の家の模型が机の上にある\ 60602\ 1.jpg);
+    height: 671px;
+    background-position: center;
+  }
+}
+
+//service-sub
+.service-sub {
+  margin-bottom: 75px;
+  position: relative;
+  &__title {
+    font-size: 40px;
+  }
+  &__inner {
+    padding: 0;
+  }
+  &__text {
+    max-width: 422px;
+  }
+  &__img {
+    position: absolute;
+    top: 0;
+    left: 538px;
+  }
+  &__text {
+    margin-bottom: 64px;
+    line-height: 1.8;
+  }
+  &__link {
+    display: flex;
+    gap: 24px;
+  }
+}
+
+//works
+.works {
+  margin-bottom: 72px;
+  &__img {
+    margin-bottom: 56px;
+  }
+  &__inner {
+    padding: 0 50px;
+  }
+  &__title {
+    font-size: 24px;
+    margin-bottom: 39px;
+  }
+  &__wrapper {
+    display: flex;
+    max-width: 860px;
+    border-top: 1px solid #b1c6dc;
+    padding-top: 20px;
+    margin-bottom: 72px;
+    &--left {
+      margin-right: 40px;
+      width: 50%;
+      max-width: 374px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      &-text {
+        line-height: 1.8;
+        font-size: rclamp(16, 20, 1020, 1440);
+      }
+    }
+    &--right {
+      width: 51.8%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      &-text {
+        margin-bottom: 88px;
+        line-height: 1.8;
+      }
+    }
+    &--text {
+      margin-bottom: 88px;
+      line-height: 1.8;
+    }
+    &--jirei {
+      //width: 100%;
+      max-width: 352px;
+    }
+    &--img {
+      padding: 20px 0;
+      //max-width: 352px;
+    }
+  }
+  .jirei-text {
+    font-size: 14px;
+  }
+}
+
+.mb146 {
+  margin-bottom: 146px;
+}
+
+@media (max-width: 1020px) {
+  .fv {
+    height: 600px;
+    &__img {
+      height: 100%;
+    }
+  }
+  .service-sub {
+    margin-bottom: 40px;
+    &__inner {
+      padding: 0 20px;
+    }
+    &__img {
+      left: 70%;
+      top: -18%;
+    }
+  }
+  .works {
+    margin-bottom: 40px;
+    &__inner {
+      padding: 0 20px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .scroll-link {
+    width: 100%;
+  }
+  .fv {
+    height: 450px;
+  }
+
+  .service-sub {
+    &__img {
+      width: 58px;
+      height: 86px;
+      left: auto;
+      right: 10px;
+      top: 0;
+    }
+    &__text {
+      max-width: 100%;
+    }
+    &__link {
+      flex-direction: column;
+    }
+  }
+  .works {
+    &__wrapper {
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-bottom: 40px;
+      &--left {
+        width: 100%;
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 40px;
+      }
+      &--right {
+        width: 100%;
+      }
+      &--text {
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
