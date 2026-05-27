@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Wrangler / Cloudflare
+.wrangler/
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Claude Code local config
+.claude/
+.agents/
+skills-lock.json
+
+# Logs
+*.log
+
+# Local archives (do not commit large standalone bundles)
+*.tar.gz
+portfolio-standalone.html
