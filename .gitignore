@@ -13,6 +13,10 @@
 .agents/
 skills-lock.json
 
+# Local design/wireframe artifacts (not for deployment)
+_wireframe/
+_design/
+
 # Logs
 *.log
 

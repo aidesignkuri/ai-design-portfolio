@@ -1684,6 +1684,10 @@ section { padding: 96px 24px; }
   vertical-align: top;
   line-height: 1.7;
 }
+.company-table td {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
 .company-table th {
   width: 160px;
   font-weight: 600;
