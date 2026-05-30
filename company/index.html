@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>会社概要 ｜ LifeCreation</title>
+  <meta name="description" content="合同会社LifeCreationの会社概要・事業内容・沿革をご紹介します。" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+
+  <!-- ============== Header ============== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand brand--wordmark" href="../index.html" aria-label="LifeCreation ホーム">
+        <img class="brand__logo" src="../assets/logo.svg" alt="LifeCreation" />
+        <span class="brand__name">LifeCreation</span>
+      </a>
+
+      <!-- PC: inline navigation (hidden on mobile) -->
+      <nav class="nav-inline" aria-label="サイトナビゲーション (PC)">
+        <a href="../index.html#services">サービス</a>
+        <a href="../services/index.html">サービス詳細</a>
+        <div class="nav-dropdown">
+          <a class="nav-dropdown__link" href="./index.html">
+            会社概要
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="nav-dropdown__menu">
+            <a href="#related-biz">関連事業</a>
+          </div>
+        </div>
+        <a href="../index.html#faq">よくあるご質問</a>
+        <a href="../index.html#contact" class="nav-cta">お問い合わせ</a>
+      </nav>
+
+      <!-- Mobile: hamburger menu button -->
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="navDrawer">
+        <span class="menu-btn__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-btn__label">メニュー</span>
+      </button>
+    </div>
+    <nav class="nav-drawer" id="navDrawer" aria-label="サイトナビゲーション">
+      <div class="nav-drawer__inner">
+        <a href="../index.html#services">サービス</a>
+        <a href="../services/index.html">サービス詳細・制作実績</a>
+        <a href="./index.html">会社概要</a>
+        <a href="#related-biz">関連事業</a>
+        <a href="../index.html#faq">よくあるご質問</a>
+        <a class="nav-drawer__cta" href="../index.html#contact">お問い合わせ</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============== Intro ============== -->
+  <section class="svc-page__intro">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <a href="../index.html">トップ</a>
+        <span aria-hidden="true">＞</span>
+        <span aria-current="page">会社概要</span>
+      </nav>
+      <h1 class="section-title">会社概要</h1>
+    </div>
+  </section>
+
+  <!-- ============== 会社概要 ============== -->
+  <section class="company-detail">
+    <div class="container container--narrow">
+      <div class="section-label">Company</div>
+      <h2 class="section-title">会社情報</h2>
+
+      <table class="company-table">
+        <tbody>
+          <tr>
+            <th scope="row">会社名</th>
+            <td>合同会社LifeCreation</td>
+          </tr>
+          <tr>
+            <th scope="row">代表</th>
+            <td>栗本祐希</td>
+          </tr>
+          <tr>
+            <th scope="row">設立</th>
+            <td>2022年9月</td>
+          </tr>
+          <tr>
+            <th scope="row">事業所</th>
+            <td>新潟県長岡市長町2丁目1643−10</td>
+          </tr>
+          <tr>
+            <th scope="row">事業内容</th>
+            <td>国内ECモールでのオンライン販売／ウェブ制作・ローカルSEO・公式LINE運用代行</td>
+          </tr>
+          <tr>
+            <th scope="row">取引銀行</th>
+            <td>第四北越銀行 新町支店<br />日本政策金融公庫</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============== 沿革 ============== -->
+  <section class="history">
+    <div class="container container--narrow">
+      <div class="section-label">History</div>
+      <h2 class="section-title">沿革</h2>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-item__date">2021年3月</span>
+          <p class="timeline-item__text">開業</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-item__date">2022年9月</span>
+          <p class="timeline-item__text">事業拡大に伴い法人化（合同会社LifeCreation 設立）</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-item__date">2025年5月</span>
+          <p class="timeline-item__text">楽天市場へ出店・リユース事業開始</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 事業内容 ============== -->
+  <section class="related-biz" id="related-biz">
+    <div class="container">
+      <div class="section-label">Business</div>
+      <h2 class="section-title">関連事業</h2>
+      <p class="section-lede">合同会社LifeCreationが手がける事業をご紹介します。</p>
+
+      <div class="related-biz__grid">
+        <div class="biz-card">
+          <span class="biz-card__num">BUSINESS 01</span>
+          <h3 class="biz-card__title">EC販売事業</h3>
+          <p class="biz-card__body">国内主要ECモールにて、お客様により良い商品を提供できるよう広告プロモーションによるマーケティング、仕入れから出荷までのサービス提供によりお客様満足度の向上に努めています。</p>
+        </div>
+        <div class="biz-card">
+          <span class="biz-card__num">BUSINESS 02</span>
+          <h3 class="biz-card__title">リユース事業</h3>
+          <p class="biz-card__body">エンドユーザーへの古物販売を行っています。商品の価値を幅広く循環提供することで顧客満足度につなげています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== Footer ============== -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>
+        <a class="brand brand--wordmark" href="../index.html" aria-label="LifeCreation ホーム">
+          <img class="brand__logo" src="../assets/logo.svg" alt="LifeCreation" />
+          <span class="brand__name" style="font-size:15px;">LifeCreation</span>
+        </a>
+        <div class="site-footer__meta" style="margin-top:10px;">
+          新潟県長岡市 ／ 個人事業主・小規模事業者向け<br />
+          © 2026 LifeCreation
+        </div>
+      </div>
+      <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+        <a href="../index.html#services">Services</a>
+        <a href="../index.html#faq">FAQ</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Sticky CTA -->
+  <div class="sticky-cta" id="stickyCta">
+    <a class="sticky-cta__line" href="https://lin.ee/u9LRQpn" target="_blank" rel="noopener noreferrer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 5.7 2 10.27c0 4.1 3.59 7.53 8.45 8.18.33.07.78.22.89.5.1.26.06.66.03.93l-.14.86c-.04.26-.21 1.02.9.56 1.1-.46 5.95-3.5 8.12-6 .9-1.05 1.75-2.72 1.75-4.97C22 5.7 17.523 2 12 2Z"/></svg>
+      LINEで相談
+    </a>
+    <a class="sticky-cta__form" href="../index.html#contact">
+      お問い合わせ
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13L13 3M13 3H5M13 3V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <script>
+    const siteHeader = document.querySelector('.site-header');
+    const syncHeader = () => {
+      siteHeader.classList.toggle('is-scrolled', window.scrollY > 12);
+    };
+    syncHeader();
+    window.addEventListener('scroll', syncHeader, { passive: true });
+
+    const menuBtn = document.getElementById('menuBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    menuBtn.addEventListener('click', () => {
+      const open = navDrawer.classList.toggle('is-open');
+      menuBtn.setAttribute('aria-expanded', String(open));
+      siteHeader.classList.toggle('is-open', open);
+    });
+    navDrawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navDrawer.classList.remove('is-open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      siteHeader.classList.remove('is-open');
+    }));
+  </script>
+</body>
+</html>
